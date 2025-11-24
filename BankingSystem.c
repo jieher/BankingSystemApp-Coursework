@@ -269,7 +269,7 @@ void delete(){
     do{
         printf("Do you really want to delete account %s (1. Yes/2. No)?\n",c);
         char input[10];
-        scanf("%[^\n]",&input);
+        scanf("%9[^\n]",input);
         while((getchar()) != '\n');
         choice=checkYesNo(input);
     } while (choice!=1 && choice!=2);
@@ -282,11 +282,11 @@ void delete(){
     char path[30];
     sprintf(path, "database\\%s.txt", c);
     fptr=fopen(path,"r");
-    fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance);
+    fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,acc.bankAccNo,&acc.balance);
     // printf("%s",acc.idNo);
     char correctIdInput[5];
     sprintf(correctIdInput, "%s", acc.idNo + strlen(acc.idNo) - 4);
-    printf("%s",correctIdInput);
+    // printf("%s",correctIdInput);
     fclose(fptr);
 
     char idEnteredtemp[6];
@@ -298,7 +298,7 @@ void delete(){
         validity=checkInput1(idEnteredtemp,correctIdInput);
     } while (validity==0);
 
-    printf("%s",idEnteredtemp);
+    // printf("%s",idEnteredtemp);
 
     char pinEntered[6];
     validity=0;
@@ -322,16 +322,232 @@ void delete(){
     // }  while(1);
 }
 
+void rewrite(struct account acc){
+    char path[30];
+    char temp[1000];
+    FILE *fptr;
+    fptr=fopen("database\\temp.txt","w");
+    // fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance);
+    sprintf(temp,"%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,acc.bankAccNo,acc.balance);
+    // printf("%s",acc.idNo);
+    // printf("%s",temp);
+    sprintf(path, "database\\%d.txt", acc.bankAccNo);
+    // printf("%s",path);
+    fputs(temp, fptr);
+    fclose(fptr);
+    printf("%s",path);
+    if(remove(path)){
+        printf("%s deleted.",path);
+    }
+    // remove(path);
+    rename("database\\temp.txt",path);
+    // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,acc.bankAccNo,acc.balance); 
+}
+
 void deposit(){
+    struct account acc;
     printf("This is deposit");
+    int validation=0;
+    char bankAccEntered[10];
+    do{
+        printf("Enter your bank account number: \n");
+        scanf("%s",bankAccEntered);
+        while((getchar()) != '\n'); 
+        for (int i=7; i<=9; i++){
+            if (validation==0){
+                validation=checkInput(bankAccEntered,i);
+            }
+        }
+    }while(validation==0);
+    printf("%s",bankAccEntered);
+
+    
+
+    char path[30];
+    FILE *fptr;
+    sprintf(path,"database\\%s.txt",bankAccEntered);
+    fptr=fopen(path,"r");
+    if (fptr==NULL){
+        printf("Invalid input.");
+        return;
+    }
+    fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
+    fclose(fptr);
+    char pinEntered[6];
+    do{
+        printf("Enter your 4-digit PIN: ");
+        scanf("%5s",pinEntered);
+        while((getchar()) != '\n'); 
+        validation=checkInput1(pinEntered,acc.pin);
+    } while (validation==0);
+    // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
+    printf("Your current balance: %.2f\n",acc.balance);
+    char depositAmountTemp[10];
+    int depositAmount;
+    do{
+        printf("Desired deposit amount: \n");
+        scanf("%s",depositAmountTemp);
+        while((getchar()) != '\n');   
+        validation=checkInput(depositAmountTemp,strlen(depositAmountTemp));
+        if (validation){
+            depositAmount=atoi(depositAmountTemp);
+            if (depositAmount>0 && depositAmount<=50000){
+                break;
+            } else{
+                printf("Please enter 0~50000 only.\n");
+            }
+        }
+    }while (validation==0);
+    acc.balance=acc.balance+depositAmount;
+    // printf("%.2f",acc.balance);
+    rewrite(acc);
+    // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
 }
 
 void withdrawal(){
     printf("This is withdrawal");
+    struct account acc;
+    int validation=0;
+    char bankAccEntered[10];
+    do{
+        printf("Enter your bank account number: \n");
+        scanf("%s",bankAccEntered);
+        while((getchar()) != '\n'); 
+        for (int i=7; i<=9; i++){
+            if (validation==0){
+                validation=checkInput(bankAccEntered,i);
+            }
+        }
+    }while(validation==0);
+    printf("%s",bankAccEntered);
+
+    char path[30];
+    FILE *fptr;
+    sprintf(path,"database\\%s.txt",bankAccEntered);
+    fptr=fopen(path,"r");
+    if (fptr==NULL){
+        printf("Invalid input.");
+        return;
+    }
+    fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
+    fclose(fptr);
+    char pinEntered[6];
+    do{
+        printf("Enter your 4-digit PIN: ");
+        scanf("%5s",pinEntered);
+        while((getchar()) != '\n'); 
+        validation=checkInput1(pinEntered,acc.pin);
+    } while (validation==0);
+    // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
+    printf("Your current balance: %.2f\n",acc.balance);
+    char withdrawalAmountTemp[10];
+    int withdrawalAmount;
+    do{
+        printf("Desired withdrawal amount: \n");
+        scanf("%s",withdrawalAmountTemp);
+        while((getchar()) != '\n');   
+        validation=checkInput(withdrawalAmountTemp,strlen(withdrawalAmountTemp));
+        if (validation){
+            withdrawalAmount=atoi(withdrawalAmountTemp);
+            if (withdrawalAmount>0 && withdrawalAmount<=acc.balance){
+                break;
+            } else{
+                printf("Please dont sohai.\n");
+            }
+        }
+    }while (validation==0);
+    acc.balance=acc.balance-withdrawalAmount;
+    // printf("%.2f",acc.balance);
+    rewrite(acc);
+    // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
 }
 
 void remittance(){
     printf("This is remmittance");
+    struct account senderAcc;
+    struct account receiverAcc;
+    int validation=0;
+    char senderBankAcc[10];
+    do{
+        printf("Enter your bank account number: \n");
+        scanf("%s",senderBankAcc);
+        while((getchar()) != '\n'); 
+        for (int i=7; i<=9; i++){
+            if (validation==0){
+                validation=checkInput(senderBankAcc,i);
+            }
+        }
+    }while(validation==0);
+    printf("%s",senderBankAcc);
+
+    char path[30];
+    FILE *fptr;
+    sprintf(path,"database\\%s.txt",senderBankAcc);
+    fptr=fopen(path,"r");
+    if (fptr==NULL){
+        printf("Invalid input.");
+        return;
+    }
+    fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",senderAcc.name,senderAcc.idNo,senderAcc.accType,senderAcc.pin,&senderAcc.bankAccNo,&senderAcc.balance); 
+    fclose(fptr);
+    char pinEntered[6];
+    do{
+        printf("Enter your 4-digit PIN: ");
+        scanf("%5s",pinEntered);
+        while((getchar()) != '\n'); 
+        validation=checkInput1(pinEntered,senderAcc.pin);
+    } while (validation==0);
+    // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
+    printf("Your current balance: %.2f\n",senderAcc.balance);
+    char transferAmountTemp[10];
+    int transferAmount;
+    do{
+        printf("Amount to be transferred: \n");
+        scanf("%s",transferAmountTemp);
+        while((getchar()) != '\n');   
+        validation=checkInput(transferAmountTemp,strlen(transferAmountTemp));
+        if (validation){
+            transferAmount=atoi(transferAmountTemp);
+            if (transferAmount>0 && transferAmount<=senderAcc.balance){
+                break;
+            } else{
+                printf("Please dont sohai.\n");
+            }
+        }
+    }while (validation==0);
+    // acc.balance=acc.balance-transferAmount;
+    // printf("%.2f",acc.balance);
+    // rewrite(acc);
+
+    char receiverBankAcc[10];
+    do{
+        printf("Enter receiver bank account number: \n");
+        scanf("%s",receiverBankAcc);
+        while((getchar()) != '\n'); 
+        for (int i=7; i<=9; i++){
+            if (validation==0){
+                validation=checkInput(receiverBankAcc,i);
+            }
+        }
+    }while(validation==0);
+    // printf("%s",receiverBankAcc);
+
+    sprintf(path,"database\\%s.txt",receiverBankAcc);
+    fptr=fopen(path,"r");
+    if (fptr==NULL){
+        printf("Receiver doesn't exist.");
+        return;
+    }
+    fclose(fptr);
+    senderAcc.balance=senderAcc.balance-transferAmount;
+    rewrite(senderAcc);
+
+    sprintf(path,"database\\%s.txt",receiverBankAcc);
+    fptr=fopen(path,"r");
+    fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",receiverAcc.name,receiverAcc.idNo,receiverAcc.accType,receiverAcc.pin,&receiverAcc.bankAccNo,&receiverAcc.balance); 
+    fclose(fptr);
+    receiverAcc.balance=receiverAcc.balance+transferAmount;
+    rewrite(receiverAcc);
 }
 
 void menu(){
@@ -341,6 +557,7 @@ void menu(){
     char action3[]="3deposit";
     char action4[]="4withdrawal";
     char action5[]="5remittance";
+    char action6[]="6quit";
     char *actionlist[]={action1,action2,action3,action4,action5};
     int valid=0;
     int action=0;
@@ -357,9 +574,10 @@ void menu(){
         printf("Choose you action:\n");
         printf("1. Create New Bank Account\n");
         printf("2. Delete Bank Account\n");
-        printf("3.Deposit\n");
+        printf("3. Deposit\n");
         printf("4. Withdrawal\n");
         printf("5. Remittance\n");
+        printf("6. Quit\n");
         //next time add a quit action here
         printf("====================================\n");
         printf("Your action:");
@@ -384,13 +602,14 @@ void menu(){
             withdrawal();
         } else if (action==5){
             remittance();
+        } else if (action==6){
+            exit(0);
         }
     }
 }
 int main(){
-    // while (1){
-    menu();
+    // while(1){
+        menu();
     // }
-
     return 0;
 }
