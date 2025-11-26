@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <direct.h>
+#include <time.h>
 
 struct account{
     char name[100];
@@ -12,6 +13,38 @@ struct account{
     int bankAccNo;
     float balance;
 };
+
+void writetolog(int action, struct account acc){
+    char *activitylist[]={"create","delete","deposit","withdrawal","remittance"};
+    char *activity=activitylist[action-1];
+    // if (action!=0){
+    //     if (action==1){
+    //         *activityptr="Create new account";
+    //     } else if (action==2){
+    //         *activityptr="Delete account";
+    //     } else if (action==3){
+    //         *activityptr="Deposit";
+    //     } else if (action==4){
+    //         *activityptr="Withdrawal";
+    //     } else if (action==5){
+    //         *activityptr="Remittance";
+    //     }
+    // } else {
+    //     printf("Error: no action chosen.");
+    // }
+
+    time_t currentTime;
+    time(&currentTime); 
+    // printf("Current time: %s", ctime(&currentTime));
+
+    FILE *fptr;
+    fptr=fopen("database\\transaction.log","a+");
+    char logtemp[1000];
+    sprintf(logtemp,"Time: %sActivity: %s\nBank account: %s\n\n",ctime(&currentTime),activity,acc.bankAccNo);
+    fputs(logtemp,fptr);
+    fclose(fptr);
+}
+
 void checkAction(char *userInput, int *valid, int *action){
     *valid=1;
     *action=0; 
@@ -29,7 +62,12 @@ void checkAction(char *userInput, int *valid, int *action){
             ogInput++;
             continue;
         }
-        *inputNoSp_ptr++ = tolower(*ogInput++);
+        if (isdigit(userInput[0])){
+            *inputNoSp_ptr = tolower(*ogInput++);
+            *inputNoSp_ptr++;
+        } else {
+            *inputNoSp_ptr++ = tolower(*ogInput++);
+        }
         // Copy the character one by one
     }
     *inputNoSp_ptr='\0';
@@ -66,7 +104,7 @@ void checkAction(char *userInput, int *valid, int *action){
     //     return;
     // }
     strcpy(userInput,inputNoSp);
-    // printf("%s %d\n\n",userInput,*action);
+    printf("%s %d\n\n",inputNoSp,*action);
     //add check for user input validity and action here
     // *validPtr=1;
 
@@ -123,7 +161,7 @@ int checkInput1(char *input, char *correctInput){
     return 1;
 }
 
-void create(){
+void create(int *action){
     printf("This is create");
     struct account acc;
     char accTypeTemp[100];
@@ -170,15 +208,37 @@ void create(){
     char accno[100];
     while (valid==0){
         FILE* fptr;
-        sprintf(accno, "database\\%d.txt", bankAccNo);
-        printf("\n%s\n",accno);
-        fptr=fopen(accno,"r");
-        if (fptr==NULL){
-            valid=1;
-        } else {
-            fclose(fptr);
-            bankAccNo = rand() % (max-min +1) +min; 
-        }
+        // printf("\n%s\n",accno);
+        // fptr=fopen(accno,"r");
+        // FILE *fptr;
+        fptr=fopen("database\\index.txt","r");
+        char c[10];
+        // int i=0;
+        do{
+            sprintf(accno,"%d",bankAccNo);
+            fgets(c,10,fptr);
+            c[strcspn(c, "\n")] = '\0';
+            // printf("%s %s\n",c,accno);
+            if (checkInput1(accno,c)){
+                bankAccNo = rand() % (max-min +1) +min; 
+                // printf("new no: %d",bankAccNo);
+                valid=0;
+                break;
+            }
+            if (feof(fptr)){
+                valid=1;
+                break ;
+            }
+            // printf("%d. %s", i+1, c);
+            // i=i+1;
+        }  while(1);
+        fclose(fptr);
+        // if (fptr==NULL){
+        //     valid=1;
+        // } else {
+        //     fclose(fptr);
+        //     bankAccNo = rand() % (max-min +1) +min; 
+        // }
     }
     printf("%d ", bankAccNo);
     
@@ -186,6 +246,7 @@ void create(){
 
     acc.balance=0.00;
     FILE* fptr;
+    sprintf(accno, "database\\%d.txt", bankAccNo);
     fptr=fopen(accno,"w");
     if (!fptr){
         printf("Error openinf sia");
@@ -204,6 +265,7 @@ void create(){
 
     printf("Account created successfully!\n");
 
+    writetolog(*action,acc);
 }
 
 int checkYesNo(char *input){
@@ -230,39 +292,52 @@ void delete(){
     fptr=fopen("database\\index.txt","r");
     char c[10];
     int i=0;
-    do
-    {
+    do{
         fgets(c,10,fptr);
-
-        // Checking for end of file
         if (feof(fptr))
             break ;
-
         printf("%d. %s", i+1, c);
-
         i=i+1;
     }  while(1);
     fclose(fptr);
     printf("====================================\n");
-    printf("Which account you want to delete? ");
-    int accChosen;
-    do{
-        scanf("%d",&accChosen);
-        while((getchar()) != '\n');
-    } while (accChosen<0 || accChosen>i);
-    // printf("%d",accChosen);
-    // printf("%d",i);
+    int validity=0;
+    char accChosen[10];
 
+    do {
+        printf("Which account you want to delete? ");
+        scanf("%9[^\n]",&accChosen);
+        while((getchar()) != '\n');
+        for (int i=7; i<=9; i++){
+            if (validity==0){
+                validity=checkInput(accChosen,i);
+            }
+        }
+        if (validity==0){
+            printf("Dont sohai");
+            continue;
+        }
+        char pathtemp[30];
+        FILE *fptr;
+        sprintf(pathtemp,"database\\%s.txt",accChosen);
+        fptr=fopen(pathtemp,"r");
+        if (fptr==NULL){
+            printf("Invalid input.");
+        }
+    }while(validity==0);
+    fclose(fptr);
     fptr=fopen("database\\index.txt","r");
     int a=1;
     do
     {
         fgets(c,10,fptr);
-        if (a==accChosen)
+        c[strcspn(c, "\n")] = '\0';
+        if (checkInput1(accChosen,c)){
+            validity=1;
             break;
+        }
         a=a+1;
     }  while(1);
-    c[strcspn(c, "\n")] = '\0';
     fclose(fptr);
     printf("%s",c);
     int choice;
@@ -290,7 +365,7 @@ void delete(){
     fclose(fptr);
 
     char idEnteredtemp[6];
-    int validity=0;
+    validity=0;
     do{
         printf("Enter the last 4 numbers of your ID of this account: ");
         scanf("%5s",idEnteredtemp);
@@ -360,8 +435,6 @@ void deposit(){
         }
     }while(validation==0);
     printf("%s",bankAccEntered);
-
-    
 
     char path[30];
     FILE *fptr;
@@ -552,12 +625,12 @@ void remittance(){
 
 void menu(){
     char userInput[100];
-    char action1[]="1createnewbankaccount";
-    char action2[]="2deletebankaccount";
-    char action3[]="3deposit";
-    char action4[]="4withdrawal";
-    char action5[]="5remittance";
-    char action6[]="6quit";
+    char action1[]="createnewbankaccount";
+    char action2[]="deletebankaccount";
+    char action3[]="deposit";
+    char action4[]="withdrawal";
+    char action5[]="remittance";
+    char action6[]="quit";
     char *actionlist[]={action1,action2,action3,action4,action5};
     int valid=0;
     int action=0;
@@ -585,6 +658,11 @@ void menu(){
         while((getchar()) != '\n');
         //eg: input=1) Check Ne"
         checkAction(userInput,&valid,&action);
+        if (checkInput1(userInput,"de") || checkInput1(userInput,"d")){
+            valid=0;
+            printf("de what deposit ke delete sohai.");
+            continue;
+        }
         if (action==0){
             int actionlistSize=sizeof(actionlist)/sizeof(actionlist[0]);
             checkAction1(userInput,&valid,&action,actionlist, actionlistSize);
@@ -593,7 +671,7 @@ void menu(){
     // printf("%s %d %d",userInput,valid,action);
     if (action!=0){
         if (action==1){
-            create();
+            create(&action);
         } else if (action==2){
             delete();
         } else if (action==3){
