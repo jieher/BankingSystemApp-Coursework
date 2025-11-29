@@ -17,26 +17,8 @@ struct account{
 void writetolog(int action, struct account acc){
     char *activitylist[]={"create","delete","deposit","withdrawal","remittance"};
     char *activity=activitylist[action-1];
-    // if (action!=0){
-    //     if (action==1){
-    //         *activityptr="Create new account";
-    //     } else if (action==2){
-    //         *activityptr="Delete account";
-    //     } else if (action==3){
-    //         *activityptr="Deposit";
-    //     } else if (action==4){
-    //         *activityptr="Withdrawal";
-    //     } else if (action==5){
-    //         *activityptr="Remittance";
-    //     }
-    // } else {
-    //     printf("Error: no action chosen.");
-    // }
-
     time_t currentTime;
     time(&currentTime); 
-    // printf("Current time: %s", ctime(&currentTime));
-
     FILE *fptr;
     fptr=fopen("database\\transaction.log","a+");
     char logtemp[1000];
@@ -87,32 +69,16 @@ void checkAction(char *userInput, int *valid, int *action){
         }
     }
     if (isdigit(inputNoSp[0]) && i>=2){
-        // if (i>=2){
-        //     inputNoSp[i-1]='\0';
-        // }
         if (inputNoSp[0]>'5' || inputNoSp[0]<'1'){
             *valid=0;
         }
     }
-    // if (userInput[0] == '\n') {
-    //     *validPtr = 0;
-    //     printf("Invalid input: cannot be empty.\n");
-    //     return;
-    // }
-    // if (userInput[0]=='\0'){
-    //     *validPtr=0;
-    //     return;
-    // }
     strcpy(userInput,inputNoSp);
-    printf("%s %d\n\n",inputNoSp,*action);
-    //add check for user input validity and action here
-    // *validPtr=1;
-
-    
+    // printf("%s %d\n\n",inputNoSp,*action);
 }
 
 void checkAction1(char *userInput, int *valid, int *action, char *actionlist[],int listSize){
-    printf("Im in\n");
+    // printf("Im in\n");
     int *validPtr=valid;
     char *userInputPtr=userInput;
     // printf("%s",userInputPtr);
@@ -133,6 +99,9 @@ void checkAction1(char *userInput, int *valid, int *action, char *actionlist[],i
         if (listIndex==listSize){
             break;
         }
+    }
+    if (*validPtr==0){
+        printf("Invalid input.\n");
     }
 }
 
@@ -282,7 +251,7 @@ int checkYesNo(char *input){
 }
 
 
-void delete(){
+void delete(int *action){
     struct account acc;
     printf("This is delete");
     printf("====================================\n");
@@ -385,16 +354,8 @@ void delete(){
     } while (validity==0);
 
     remove(path);
-    // fptr=fopen("database\\index.txt","w");
-    // a=0;
-    // char temp[i][10];
-    // do
-    // {
-    //     fgets(c,10,fptr);
-    //     if (a==accChosen){
-    //         continue;
-    //     }
-    // }  while(1);
+
+    writetolog(*action,acc);
 }
 
 void rewrite(struct account acc){
@@ -402,12 +363,8 @@ void rewrite(struct account acc){
     char temp[1000];
     FILE *fptr;
     fptr=fopen("database\\temp.txt","w");
-    // fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance);
     sprintf(temp,"%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,acc.bankAccNo,acc.balance);
-    // printf("%s",acc.idNo);
-    // printf("%s",temp);
     sprintf(path, "database\\%d.txt", acc.bankAccNo);
-    // printf("%s",path);
     fputs(temp, fptr);
     fclose(fptr);
     printf("%s",path);
@@ -416,10 +373,9 @@ void rewrite(struct account acc){
     }
     // remove(path);
     rename("database\\temp.txt",path);
-    // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,acc.bankAccNo,acc.balance); 
 }
 
-void deposit(){
+void deposit(int *action){
     struct account acc;
     printf("This is deposit");
     int validation=0;
@@ -475,9 +431,10 @@ void deposit(){
     // printf("%.2f",acc.balance);
     rewrite(acc);
     // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
+    writetolog(*action,acc);
 }
 
-void withdrawal(){
+void withdrawal(int *action){
     printf("This is withdrawal");
     struct account acc;
     int validation=0;
@@ -533,9 +490,10 @@ void withdrawal(){
     // printf("%.2f",acc.balance);
     rewrite(acc);
     // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
+    writetolog(*action,acc);
 }
 
-void remittance(){
+void remittance(int *action){
     printf("This is remmittance");
     struct account senderAcc;
     struct account receiverAcc;
@@ -614,6 +572,7 @@ void remittance(){
     fclose(fptr);
     senderAcc.balance=senderAcc.balance-transferAmount;
     rewrite(senderAcc);
+    writetolog(*action,senderAcc);
 
     sprintf(path,"database\\%s.txt",receiverBankAcc);
     fptr=fopen(path,"r");
@@ -621,6 +580,7 @@ void remittance(){
     fclose(fptr);
     receiverAcc.balance=receiverAcc.balance+transferAmount;
     rewrite(receiverAcc);
+    writetolog(*action,receiverAcc);
 }
 
 void menu(){
@@ -635,32 +595,24 @@ void menu(){
     int valid=0;
     int action=0;
     int tempAction=0;
-    // for (int i=0;i<sizeof(actionlist)/sizeof(actionlist[0]);i++){
-    //     checkAction(actionlist[i],&valid,&tempAction);
-    // }
-    // for (int i=0;i<sizeof(actionlist)/sizeof(actionlist[0]);i++){
-    //     printf("%s",actionlist[i]);
-    // }
     valid=0;
+    printf("====================================\n");
+    printf("Choose you action:\n");
+    printf("1. Create New Bank Account\n");
+    printf("2. Delete Bank Account\n");
+    printf("3. Deposit\n");
+    printf("4. Withdrawal\n");
+    printf("5. Remittance\n");
+    printf("6. Quit\n");
+    printf("====================================\n");
     while (valid==0){
-        printf("====================================\n");
-        printf("Choose you action:\n");
-        printf("1. Create New Bank Account\n");
-        printf("2. Delete Bank Account\n");
-        printf("3. Deposit\n");
-        printf("4. Withdrawal\n");
-        printf("5. Remittance\n");
-        printf("6. Quit\n");
-        //next time add a quit action here
-        printf("====================================\n");
         printf("Your action:");
         scanf("%[^\n]",userInput);
         while((getchar()) != '\n');
-        //eg: input=1) Check Ne"
         checkAction(userInput,&valid,&action);
         if (checkInput1(userInput,"de") || checkInput1(userInput,"d")){
             valid=0;
-            printf("de what deposit ke delete sohai.");
+            printf("Invalid input. 'de' and 'd' may lead to delete or deposit");
             continue;
         }
         if (action==0){
@@ -673,13 +625,13 @@ void menu(){
         if (action==1){
             create(&action);
         } else if (action==2){
-            delete();
+            delete(&action);
         } else if (action==3){
-            deposit();
+            deposit(&action);
         } else if (action==4){
-            withdrawal();
+            withdrawal(&action);
         } else if (action==5){
-            remittance();
+            remittance(&action);
         } else if (action==6){
             exit(0);
         }
