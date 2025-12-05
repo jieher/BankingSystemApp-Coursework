@@ -7,13 +7,14 @@
 
 struct account{
     char name[100];
-    char idNo[13];
+    char idNo[14];
     char accType[100];
     char pin[5];
     int bankAccNo;
     float balance;
 };
 
+// Update transaction log
 void writetolog(int action, struct account acc){
     char *activitylist[]={"create","delete","deposit","withdrawal","remittance"};
     char *activity=activitylist[action-1];
@@ -22,7 +23,7 @@ void writetolog(int action, struct account acc){
     FILE *fptr;
     fptr=fopen("database\\transaction.log","a+");
     char logtemp[1000];
-    sprintf(logtemp,"Time: %sActivity: %s\nBank account: %s\n\n",ctime(&currentTime),activity,acc.bankAccNo);
+    sprintf(logtemp,"Time: %sActivity: %s\nBank account: %d\n\n",ctime(&currentTime),activity,acc.bankAccNo);
     fputs(logtemp,fptr);
     fclose(fptr);
 }
@@ -145,7 +146,7 @@ void create(int *action){
     int validity=0;
     do{
         printf("Enter your identification number: \n");
-        scanf("%12[^\n]",acc.idNo);
+        scanf("%13[^\n]",acc.idNo);
         while((getchar()) != '\n');
         validity=checkInput(acc.idNo,12);
     }while (validity==0);
@@ -292,6 +293,7 @@ void delete(int *action){
         fptr=fopen(pathtemp,"r");
         if (fptr==NULL){
             printf("Invalid input.");
+            validity=0;
         }
     }while(validity==0);
     fclose(fptr);
@@ -325,12 +327,16 @@ void delete(int *action){
 
     char path[30];
     sprintf(path, "database\\%s.txt", c);
+    printf("%s",path);
     fptr=fopen(path,"r");
-    fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,acc.bankAccNo,&acc.balance);
-    // printf("%s",acc.idNo);
+    if (!fptr){
+        printf("error");
+    }
+    fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance);
+    printf("%s",acc.idNo);
     char correctIdInput[5];
     sprintf(correctIdInput, "%s", acc.idNo + strlen(acc.idNo) - 4);
-    // printf("%s",correctIdInput);
+    printf("%s",correctIdInput);
     fclose(fptr);
 
     char idEnteredtemp[6];
@@ -355,7 +361,37 @@ void delete(int *action){
 
     remove(path);
 
+    fptr=fopen("database\\index.txt","r");
+    FILE *fptrtemp;
+    fptrtemp=fopen("database\\indextemp.txt","w");
+    fclose(fptrtemp);
+    fptrtemp=fopen("database\\indextemp.txt","a+");
+    char prevaccno[10];
+    do
+    {
+        fgets(c,10,fptr);
+        if (feof(fptr)){
+            break ;
+        }
+        c[strcspn(c, "\n")] = '\0';
+        if (checkInput1(accChosen,c)){
+            continue;
+        }
+        if (checkInput1(c,prevaccno)){
+            continue;
+        }
+        char validaccno[10];
+        sprintf(validaccno,"%s\n",c);
+        fputs(validaccno,fptrtemp);
+        sprintf(prevaccno,"%s",c);
+    }  while(1);
+    fclose(fptr);
+    fclose(fptrtemp);
+    remove("database\\index.txt");
+    rename("database\\indextemp.txt","database\\index.txt");
+
     writetolog(*action,acc);
+    
 }
 
 void rewrite(struct account acc){
@@ -572,7 +608,7 @@ void remittance(int *action){
     fclose(fptr);
     senderAcc.balance=senderAcc.balance-transferAmount;
     rewrite(senderAcc);
-    writetolog(*action,senderAcc);
+    // writetolog(*action,senderAcc);
 
     sprintf(path,"database\\%s.txt",receiverBankAcc);
     fptr=fopen(path,"r");
@@ -580,7 +616,7 @@ void remittance(int *action){
     fclose(fptr);
     receiverAcc.balance=receiverAcc.balance+transferAmount;
     rewrite(receiverAcc);
-    writetolog(*action,receiverAcc);
+    // writetolog(*action,receiverAcc);
 }
 
 void menu(){
