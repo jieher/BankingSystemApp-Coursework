@@ -26,3 +26,23 @@ Time: Fri Dec 05 15:24:31 2025
 Activity: delete
 Bank account: 1000041
 
+Time: Fri Dec 05 17:18:55 2025
+Activity: deposit
+Bank account: 1026500
+
+Time: Fri Dec 05 17:19:18 2025
+Activity: withdrawal
+Bank account: 1026500
+
+Time: Fri Dec 05 18:02:22 2025
+Activity: create
+Bank account: 1000041
+
+Time: Fri Dec 05 18:02:52 2025
+Activity: remittance
+Bank account: 1026500
+
+Time: Fri Dec 05 18:02:52 2025
+Activity: remittance
+Bank account: 1000041
+
