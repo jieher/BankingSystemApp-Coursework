@@ -759,7 +759,7 @@ void menu(){
     char action4[]="withdrawal";
     char action5[]="remittance";
     char action6[]="quit";
-    char *actionlist[]={action1,action2,action3,action4,action5};
+    char *actionlist[]={action1,action2,action3,action4,action5,action6};
     int valid=0;
     int action=0;
     int tempAction=0;
