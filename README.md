@@ -3,8 +3,8 @@ This is a simple banking system that allow users to perform several actions incl
 1) Menu
    - Users can choose their action here.
    - Several inputs are allowed, including entering index number from the list (eg: "1","2"), keywords (eg: "create","delete") or both (eg: "1. Create", "1 Create").
-     ~ If user input "1) Creatw ", even if the keyword behind has a wrong spelling, the system will lead to the action according to the number in front.
-     ~ Same goes to "1) Delete", it will enter create as its the first in the list instead of delete.
+     - If user input "1) Creatw ", even if the keyword behind has a wrong spelling, the system will lead to the action according to the number in front.
+     - Same goes to "1) Delete", it will enter create as its the first in the list instead of delete.
 2) Create
    - Users have to enter their name, identity number, account type and 4 digit PIN number. Account number is generated randomly and the initial balance will be 0.00.
    - Name: There's no input rules/limit for names.
