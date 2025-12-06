@@ -432,7 +432,7 @@ void rewrite(struct account acc){
     fputs(temp, fptr);
     fclose(fptr);
     // printf("%s",path);
-    if(!remove(path)){
+    if(remove(path)){
     //     printf("Account updated successfully!\n",path);
     // }else{
         printf("Error deleting temp file.");
@@ -675,7 +675,7 @@ void remittance(int *action){
     printf("Welcome back %s!\n",senderAcc.name);
     printf("Your current balance: %.2f\n",senderAcc.balance);
     char transferAmountTemp[10];
-    int transferAmount;
+    float transferAmount;
     do{
         printf("Amount to be transferred: \n");
         scanf("%s",transferAmountTemp);

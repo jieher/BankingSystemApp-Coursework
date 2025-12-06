@@ -276,3 +276,33 @@ Activity: remittance
 Bank account: 1018467
 Amount involved:8.00
 
+Time: Sat Dec 06 17:39:31 2025
+Activity: remittance
+Bank account: 1011478
+Amount involved:10.20
+
+Time: Sat Dec 06 17:39:31 2025
+Activity: remittance
+Bank account: 1018467
+Amount involved:10.00
+
+Time: Sat Dec 06 17:40:28 2025
+Activity: remittance
+Bank account: 1011478
+Amount involved:10.20
+
+Time: Sat Dec 06 17:40:28 2025
+Activity: remittance
+Bank account: 1018467
+Amount involved:10.00
+
+Time: Sat Dec 06 17:44:42 2025
+Activity: remittance
+Bank account: 1011478
+Amount involved:9.18
+
+Time: Sat Dec 06 17:44:42 2025
+Activity: remittance
+Bank account: 1018467
+Amount involved:9.00
+
