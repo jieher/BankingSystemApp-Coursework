@@ -228,7 +228,7 @@ void create(int *action){
     sprintf(accno, "database\\%d.txt", bankAccNo);
     fptr=fopen(accno,"w");
     if (!fptr){
-        printf("Error openinf sia");
+        printf("Error opening.");
     }
     
     char temp[1000];
@@ -686,7 +686,7 @@ void remittance(int *action){
             if (transferAmount>0 && transferAmount<=senderAcc.balance){
                 validation=1;
             } else{
-                printf("Please dont sohai.Invalid input. Please enter valid numbers within 1 to 50000 with 2 decimal place only.\n");
+                printf("Invalid input. Please enter valid numbers within 1 to 50000 with 2 decimal place only.\n");
                 validation=0;
             }
         }
