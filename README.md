@@ -23,4 +23,16 @@ This is a simple banking system that allow users to perform several actions incl
    - User have to input bank account number and 4 digit PIN to enter. Then it will show the current balance and prompts user to enter deposit amount.
    - Bank account number: Only accept input that is exactly the same as the user's bank account number in the folder. All other inputs will be rejected.
    - 4 digit PIN: Must be exactly same as the 4 digit PIN stored in the file. All other inputs will be rejected.
-   - Deposit amount: Accept numbers and one "." to represent cents only. Entering alphabets, more than one "." (eg:100.10.10) and more than 2 decimal place (eg: 100.999) will be rejected. 
+   - Deposit amount: Accept numbers and one "." to represent cents only. Entering alphabets, more than one "." (eg:100.10.10) and more than 2 decimal place (eg: 100.999) will be rejected.
+5) Withdrawal
+   - User have to input bank account number and 4 digit PIN to enter. Then it will show the current balance and prompts user to enter withdrawal amount.
+   - Bank account number: Only accept input that is exactly the same as the user's bank account number in the folder. All other inputs will be rejected.
+   - 4 digit PIN: Must be exactly same as the 4 digit PIN stored in the file. All other inputs will be rejected.
+   - Withdrawal amount: Accept numbers and one "." to represent cents only. Entering alphabets, more than one "." (eg:100.10.10) and more than 2 decimal place (eg: 100.999) will be rejected.
+6) Remittance (transaction)
+   - User have to input bank account number and 4 digit PIN to enter.
+   - Then it will show the current balance and prompts user to enter transaction amount.
+   - User will then have to enter the bank account number of the receiver.
+   - Bank account number (sender and receiver): Only accept input that is exactly the same as the user's bank account number in the folder. All other inputs will be rejected.
+   - 4 digit PIN: Must be exactly same as the 4 digit PIN stored in the file. All other inputs will be rejected.
+   - Transfer amount: Accept numbers and one "." to represent cents only. Entering alphabets, more than one "." (eg:100.10.10) and more than 2 decimal place (eg: 100.999) will be rejected.
