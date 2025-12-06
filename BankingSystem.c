@@ -115,7 +115,7 @@ void checkAction1(char *userInput, int *valid, int *action, char *actionlist[],i
             *validPtr=1;
         } else {
             *validPtr=0;
-            i=0;
+            i=-1;
             listIndex++;
         }
         if (listIndex==listSize){
@@ -161,7 +161,7 @@ void create(int *action){
         while((getchar()) != '\n');
         validity=checkDigit(acc.idNo,12);
         if (validity==0){
-            printf("Please enter numbers only. Eg: 012345678901");
+            printf("Please enter numbers only. Eg: 012345678901\n");
         }
     }while (validity==0);
     while (createValid==0){
@@ -174,7 +174,7 @@ void create(int *action){
             checkAction1(accTypeTemp,&createValid,&typeListIndex,accTypeList,typelistSize);
         } 
         if (!createValid){
-            printf("Invalid input. Please enter index or the actual word only.");
+            printf("Invalid input. Please enter index or the actual word only.\n");
         }
     }
     strcpy(acc.accType,accTypeList[typeListIndex-1]);
@@ -186,7 +186,7 @@ void create(int *action){
         while((getchar())!='\n');
         validity=checkDigit(acc.pin,4);
         if (validity==0){
-            printf("Invalid input. Please enter 4 numbers only.");
+            printf("Invalid input. Please enter 4 numbers only.\n");
         }
     } while (validity==0);
 
@@ -341,9 +341,9 @@ void delete(int *action){
         while((getchar()) != '\n');
         choice=checkYesNo(input);
     } while (choice!=1 && choice!=2);
-    if (choice==1){
-        printf("Yes I do.\n");
-    } else {
+    if (choice==2){
+    //     printf("Yes I do.\n");
+    // } else {
         printf("Returning to menu..");
         return;
     }
@@ -359,7 +359,7 @@ void delete(int *action){
     // printf("%s",acc.idNo);
     char correctIdInput[5];
     sprintf(correctIdInput, "%s", acc.idNo + strlen(acc.idNo) - 4);
-    printf("%s",correctIdInput);
+    // printf("%s",correctIdInput);
     fclose(fptr);
 
     char idEnteredtemp[6];
@@ -432,9 +432,9 @@ void rewrite(struct account acc){
     fputs(temp, fptr);
     fclose(fptr);
     // printf("%s",path);
-    if(remove(path)){
-        printf("Account updated successfully!\n",path);
-    }else{
+    if(!remove(path)){
+    //     printf("Account updated successfully!\n",path);
+    // }else{
         printf("Error deleting temp file.");
     }
     // remove(path);
@@ -540,7 +540,7 @@ void deposit(int *action){
     // printf("%.2f",acc.balance);
     rewrite(acc);
     // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
-    printf("Deposit successful!\nCurrent balance: %.2f\nReturning to menu..",acc.balance);
+    printf("Deposit successful!\nCurrent balance: %.2f\nReturning to menu..\n",acc.balance);
     writetolog(*action,acc,depositAmount,0);
 }
 
@@ -561,7 +561,7 @@ void withdrawal(int *action){
             }
         }
         if (!validation){
-            printf("Invalid input. Please enter your bank account number again.");
+            printf("Invalid input. Please enter your bank account number again.\n");
             continue;
         }
         char path[30];
@@ -575,7 +575,7 @@ void withdrawal(int *action){
         fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
         fclose(fptr);
         if(!validation){
-            printf("Invalid input. Please enter your bank account number again.");
+            printf("Invalid input. Please enter your bank account number again.\n");
         }
     }while(validation==0);
     // printf("%s",bankAccEntered);
@@ -612,7 +612,7 @@ void withdrawal(int *action){
             }
         }
         if (!validation){
-            printf("Invalid input. Please enter valid numbers within 1 to 50000 with 2 decimal place only.");
+            printf("Invalid input. Please enter valid numbers within 1 to 50000 with 2 decimal place only.\n");
         }
     }while (validation==0);
     acc.balance=acc.balance-withdrawalAmount;
@@ -620,14 +620,14 @@ void withdrawal(int *action){
     rewrite(acc);
     // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
     printf("====================================\n");
-    printf("Withdrawal successful!\nCurrent balance: %.2f\nReturning to menu..",acc.balance);
+    printf("Withdrawal successful!\nCurrent balance: %.2f\nReturning to menu..\n",acc.balance);
     writetolog(*action,acc,withdrawalAmount,0);
 }
 
 void remittance(int *action){
     // printf("This is remmittance");
     printf("====================================\n");
-    printf("Remittance");
+    printf("Remittance\n");
     struct account senderAcc;
     struct account receiverAcc;
     int validation=0;
@@ -644,19 +644,19 @@ void remittance(int *action){
             }
         }
         if (!validation){
-            printf("Invalid input. Please enter your bank account number again.");
+            printf("Invalid input. Please enter your bank account number again.\n");
             continue;
         }
         sprintf(path,"database\\%s.txt",senderBankAcc);
         fptr=fopen(path,"r");
         if (fptr==NULL){
-            printf("Invalid input.");
-            return;
+            validation=0;
+            // return;
         }
         fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",senderAcc.name,senderAcc.idNo,senderAcc.accType,senderAcc.pin,&senderAcc.bankAccNo,&senderAcc.balance); 
         fclose(fptr);
         if (!validation){
-            printf("Invalid input. Please enter your bank account number again.");
+            printf("Invalid input. Please enter your bank account number again.\n");
         }
     }while(validation==0);
     // printf("%s",senderBankAcc);
@@ -668,11 +668,11 @@ void remittance(int *action){
         while((getchar()) != '\n'); 
         validation=checkInputSimilarity(pinEntered,senderAcc.pin);
         if (!validation){
-            printf("Incorrect PIN entered. Please try again.");
+            printf("Incorrect PIN entered. Please try again.\n");
         }
     } while (validation==0);
     // printf("%s\n%s\n%s\n%s\n%d\n%.2f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
-    printf("Welcome back %s!",senderAcc.name);
+    printf("Welcome back %s!\n",senderAcc.name);
     printf("Your current balance: %.2f\n",senderAcc.balance);
     char transferAmountTemp[10];
     int transferAmount;
@@ -726,7 +726,8 @@ void remittance(int *action){
         }
         // return;
     }
-    remittancefee=round(remittancefee);
+    // remittancefee=round(remittancefee);
+    // cout << round(remittancefee);
 
     senderAcc.balance=senderAcc.balance-transferAmount-remittancefee;
     rewrite(senderAcc);
@@ -783,6 +784,9 @@ void menu(){
             printf("Invalid input. 'de' and 'd' may lead to delete or deposit.\n");
             continue;
         }
+        // if (checkInputSimilarity(userInput,"re")||checkInputSimilarity(userInput,"r")){
+        //     action=5;
+        // }
         if (action==0){
             int actionlistSize=sizeof(actionlist)/sizeof(actionlist[0]);
             checkAction1(userInput,&valid,&action,actionlist, actionlistSize);
