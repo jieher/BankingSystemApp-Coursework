@@ -41,9 +41,9 @@ void writetolog(int action, struct account acc, float amount, int checkforrem){
     // If its remittance snd is sender, count for total amount deducted.
     if (checkforrem==1){
         if (checkInputSimilarity(acc.accType,"savings")){
-            amount=amount/1.02;
+            amount=amount*1.02;
         } else {
-            amount=amount/1.03;
+            amount=amount*1.03;
         }
     }
     // Update log file
@@ -569,7 +569,7 @@ void deposit(int *action){
     } while (validation==0);
     printf("====================================\n");
     printf("Welcome back %s!\n",acc.name);
-    printf("Your current balance: RM%.2f\n",acc.balance);
+    printf("Your current balance: RM%.2f",acc.balance);
     char depositAmountTemp[10];
     float depositAmount;
     //let user input deposit amount
@@ -658,7 +658,7 @@ void withdrawal(int *action){
     char withdrawalAmountTemp[10];
     float withdrawalAmount;
     do{
-        printf("Desired withdrawal amount: RM\n");
+        printf("Desired withdrawal amount: RM");
         scanf("%s",withdrawalAmountTemp);
         while((getchar()) != '\n');   
         // check if input is valid format for price
@@ -743,7 +743,7 @@ void remittance(int *action){
     float transferAmount;
     //ask user to enter amount to be transfered.
     do{
-        printf("Amount to be transferred (Limit: 50000): RM\n");
+        printf("Amount to be transferred (Limit: 50000): RM");
         scanf("%s",transferAmountTemp);
         while((getchar()) != '\n');   
         //check if input format is valid
@@ -805,6 +805,7 @@ void remittance(int *action){
     //update sender's file
     rewrite(senderAcc);
     //update log
+    // float amounttemp=(transferAmount+remittancefee);
     writetolog(*action,senderAcc,transferAmount,1);
 
     //update receiver's file
