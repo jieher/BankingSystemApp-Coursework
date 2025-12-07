@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include <direct.h>
+// #include <direct.h>
 #include <math.h>
 #include <time.h>
 
@@ -395,7 +395,7 @@ void delete(int *action){
         printf("error");
     }
     //get all data from the file
-    fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance);
+    fscanf(fptr,"%99[^\n]\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance);
     // get the correct last 4 digit of the id number
     char correctIdInput[5];
     sprintf(correctIdInput, "%s", acc.idNo + strlen(acc.idNo) - 4);
@@ -543,10 +543,11 @@ void deposit(int *action){
         fptr=fopen(path,"r");
         if (fptr==NULL){
             validation=0;
-            return;
+            continue;
         }
         //retrieve all data from the file
-        fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
+        fscanf(fptr,"%99[^\n]\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
+        // printf("%s",acc.pin);
         fclose(fptr);
         if (validation==0){
             printf("Invalid input. Please enter your bank account number again.\n");
@@ -595,6 +596,7 @@ void deposit(int *action){
     //update file
     rewrite(acc);
     //report
+    printf("====================================\n");
     printf("Deposit successful!\nCurrent balance: %.2f\nReturning to menu..\n",acc.balance);
     //write to log
     writetolog(*action,acc,depositAmount,0);
@@ -631,7 +633,7 @@ void withdrawal(int *action){
             return;
         }
         //retrieve all data if file exist
-        fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
+        fscanf(fptr,"%%99[^\n]\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
         fclose(fptr);
         if(!validation){
             printf("Invalid input. Please enter your bank account number again.\n");
@@ -715,7 +717,7 @@ void remittance(int *action){
             validation=0;
         }
         //retrieve the data from the file if exist
-        fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",senderAcc.name,senderAcc.idNo,senderAcc.accType,senderAcc.pin,&senderAcc.bankAccNo,&senderAcc.balance); 
+        fscanf(fptr,"%99[^\n]\n%s\n%s\n%s\n%d\n%f",senderAcc.name,senderAcc.idNo,senderAcc.accType,senderAcc.pin,&senderAcc.bankAccNo,&senderAcc.balance); 
         fclose(fptr);
         if (!validation){
             printf("Invalid input. Please enter your bank account number again.\n");
@@ -783,7 +785,7 @@ void remittance(int *action){
             validation=0;
         } else {
             //retrieve data if file exist
-            fscanf(fptr,"%s\n%s\n%s\n%s\n%d\n%f",receiverAcc.name,receiverAcc.idNo,receiverAcc.accType,receiverAcc.pin,&receiverAcc.bankAccNo,&receiverAcc.balance); 
+            fscanf(fptr,"%99[^\n]\n%s\n%s\n%s\n%d\n%f",receiverAcc.name,receiverAcc.idNo,receiverAcc.accType,receiverAcc.pin,&receiverAcc.bankAccNo,&receiverAcc.balance); 
         }
         fclose(fptr);
     }while(validation==0);
