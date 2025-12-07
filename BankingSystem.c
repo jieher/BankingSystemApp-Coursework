@@ -671,7 +671,7 @@ void withdrawal(int *action){
             }
         }
         if (!validation){
-            printf("Invalid input. Please enter valid numbers within 1 to 50000 with 2 decimal place only.\n");
+            printf("Invalid input. Please enter valid numbers within your current balance with 2 decimal place only.\n");
         }
     }while (validation==0);
     acc.balance=acc.balance-withdrawalAmount;
@@ -741,7 +741,7 @@ void remittance(int *action){
     float transferAmount;
     //ask user to enter amount to be transfered.
     do{
-        printf("Amount to be transferred: \n");
+        printf("Amount to be transferred (Limit: 50000): RM\n");
         scanf("%s",transferAmountTemp);
         while((getchar()) != '\n');   
         //check if input format is valid
@@ -752,7 +752,7 @@ void remittance(int *action){
             if (transferAmount>0 && transferAmount<=senderAcc.balance){
                 validation=1;
             } else{
-                printf("Invalid input. Please enter valid numbers within 1 to 50000 with 2 decimal place only.\n");
+                printf("Invalid input. Please enter valid numbers within your balance with 2 decimal place only.\n");
                 validation=0;
             }
         }
@@ -889,9 +889,19 @@ void menu(){
 }
 
 int main(){
+    FILE *fptr;
+    fptr=fopen("database\\index.txt", "r");
+    if (fptr==NULL) {
+        fptr=fopen("database\\index.txt", "w");
+    }
+    fclose(fptr);
+    fptr=fopen("database\\transaction.log", "r");
+    if (fptr==NULL) {
+        fptr=fopen("database\\transaction.log", "w");
+    }
+    fclose(fptr);
     while(1){
         menu();
     }
     return 0;
 }
-// ensure that u got the directories needed
