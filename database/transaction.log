@@ -361,3 +361,18 @@ Activity: deposit
 Bank account: 1026500
 Amount involved:123.30
 
+Time: Sun Dec 07 20:15:31 2025
+Activity: withdrawal
+Bank account: 1026500
+Amount involved:3.30
+
+Time: Sun Dec 07 20:16:06 2025
+Activity: remittance
+Bank account: 1026500
+Amount involved:9.71
+
+Time: Sun Dec 07 20:16:06 2025
+Activity: remittance
+Bank account: 1019169
+Amount involved:10.00
+

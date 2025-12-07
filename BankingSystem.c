@@ -51,7 +51,7 @@ void writetolog(int action, struct account acc, float amount, int checkforrem){
     fptr=fopen("database\\transaction.log","a+");
     char logtemp[1000];
     // Put all info to be saved in a single variable
-    sprintf(logtemp,"Time: %sActivity: %s\nBank account: %d\nAmount involved:%.2f\n\n",ctime(&currentTime),activity,acc.bankAccNo,amount);
+    sprintf(logtemp,"Time: %sActivity: %s\nBank account: %d\nAmount involved: RM%.2f\n\n",ctime(&currentTime),activity,acc.bankAccNo,amount);
     fputs(logtemp,fptr);
     fclose(fptr);
 }
@@ -276,7 +276,7 @@ void create(int *action){
     printf("Identity number: %s",acc.idNo);
     printf("Bank account number: %d\n",acc.bankAccNo);
     printf("Account type: %s\n",acc.accType);
-    printf("Current balance: %.2f\n",acc.balance);
+    printf("Current balance: RM%.2f\n",acc.balance);
     //add activity to log
     writetolog(*action,acc,0,0);
 }
@@ -569,12 +569,12 @@ void deposit(int *action){
     } while (validation==0);
     printf("====================================\n");
     printf("Welcome back %s!\n",acc.name);
-    printf("Your current balance: %.2f\n",acc.balance);
+    printf("Your current balance: RM%.2f\n",acc.balance);
     char depositAmountTemp[10];
     float depositAmount;
     //let user input deposit amount
     do{
-        printf("Desired deposit amount: \n");
+        printf("Desired deposit amount: RM\n");
         scanf("%s",depositAmountTemp);
         while((getchar()) != '\n'); 
         //check if input is valid for price
@@ -597,14 +597,14 @@ void deposit(int *action){
     rewrite(acc);
     //report
     printf("====================================\n");
-    printf("Deposit successful!\nCurrent balance: %.2f\nReturning to menu..\n",acc.balance);
+    printf("Deposit successful!\nCurrent balance: RM%.2f\nReturning to menu..\n",acc.balance);
     //write to log
     writetolog(*action,acc,depositAmount,0);
 }
 //This function allow users  to withdraw money
 void withdrawal(int *action){
     printf("====================================\n");
-    printf("Withdrawal");
+    printf("Withdrawal\n");
     struct account acc;
     int validation=1;
     char bankAccEntered[10];
@@ -633,7 +633,7 @@ void withdrawal(int *action){
             return;
         }
         //retrieve all data if file exist
-        fscanf(fptr,"%%99[^\n]\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
+        fscanf(fptr,"%99[^\n]\n%s\n%s\n%s\n%d\n%f",acc.name,acc.idNo,acc.accType,acc.pin,&acc.bankAccNo,&acc.balance); 
         fclose(fptr);
         if(!validation){
             printf("Invalid input. Please enter your bank account number again.\n");
@@ -648,17 +648,17 @@ void withdrawal(int *action){
         //if its the same as the PIN saved in file
         validation=checkInputSimilarity(pinEntered,acc.pin);
         if (!validation){
-            printf("Incorrect PIN entered.");
+            printf("Incorrect PIN entered.\n");
         }
     } while (validation==0);
     printf("====================================\n");
     printf("Welcome back %s!\n",acc.name); 
-    printf("Your current balance: %.2f\n",acc.balance);
+    printf("Your current balance: RM%.2f\n",acc.balance);
     //ask user to enter withdrawal amount
     char withdrawalAmountTemp[10];
     float withdrawalAmount;
     do{
-        printf("Desired withdrawal amount: \n");
+        printf("Desired withdrawal amount: RM\n");
         scanf("%s",withdrawalAmountTemp);
         while((getchar()) != '\n');   
         // check if input is valid format for price
@@ -680,7 +680,7 @@ void withdrawal(int *action){
     // update file
     rewrite(acc);
     printf("====================================\n");
-    printf("Withdrawal successful!\nCurrent balance: %.2f\nReturning to menu..\n",acc.balance);
+    printf("Withdrawal successful!\nCurrent balance: RM%.2f\nReturning to menu..\n",acc.balance);
     //write to file
     writetolog(*action,acc,withdrawalAmount,0);
 }
@@ -738,7 +738,7 @@ void remittance(int *action){
     } while (validation==0);
     printf("====================================\n");
     printf("Welcome back %s!\n",senderAcc.name);
-    printf("Your current balance: %.2f\n",senderAcc.balance);
+    printf("Your current balance: RM%.2f\n",senderAcc.balance);
     char transferAmountTemp[10];
     float transferAmount;
     //ask user to enter amount to be transfered.
@@ -818,8 +818,8 @@ void remittance(int *action){
     printf("Bank account: %d\n",senderAcc.bankAccNo);
     printf("Receiver: %s\n",receiverAcc.name);
     printf("Bank account: %d\n",receiverAcc.bankAccNo);
-    printf("Amount transfered: %.2f\n",transferAmount);
-    printf("Remittance fee: %.2f\n",remittancefee);
+    printf("Amount transfered: RM%.2f\n",transferAmount);
+    printf("Remittance fee: RM%.2f\n",remittancefee);
 
     //update log
     writetolog(*action,receiverAcc,transferAmount,0);
