@@ -382,7 +382,7 @@ void delete(int *action){
     } while (choice!=1 && choice!=2);
     //if user regret, return to menu
     if (choice==2){
-        printf("Returning to menu..");
+        printf("Returning to menu..\n");
         return;
     }
 
@@ -422,7 +422,7 @@ void delete(int *action){
         while((getchar()) != '\n'); 
         validity=checkInputSimilarity(pinEntered,acc.pin);
         if (!validity){
-            printf("Invalid PIN enetered.");
+            printf("Invalid PIN enetered.\n");
         }
     } while (validity==0);
     //Delete the account file
@@ -828,6 +828,7 @@ void remittance(int *action){
 
 //Main menu
 void menu(){
+    // Session info
     time_t currentTime;
     time(&currentTime); 
     printf("====================================\n");
@@ -924,6 +925,9 @@ int main(){
     fclose(fptr);
     while(1){
         menu();
+        printf("====================================\n");
+        printf("SESSION END\n");
+        printf("====================================\n");
     }
     return 0;
 }
