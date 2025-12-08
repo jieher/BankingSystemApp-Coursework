@@ -889,6 +889,9 @@ void menu(){
             int actionlistSize=sizeof(actionlist)/sizeof(actionlist[0]);
             checkAction1(userInput,&valid,&action,actionlist, actionlistSize);
         }
+        if (i==0 && action!=1){
+            printf("No accounts available.");
+        }
         if (valid==0){
             printf("Invalid input. Please enter index (within 1 to 6) or keywords only.\n");
         }
