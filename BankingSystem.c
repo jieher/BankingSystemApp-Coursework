@@ -831,7 +831,7 @@ void menu(){
     time_t currentTime;
     time(&currentTime); 
     printf("====================================\n");
-    printf("SESSION START");
+    printf("SESSION START\n");
     printf("Current Date and Time: %s",ctime(&currentTime));
     //count all bank account numbers stored in the index file one by one
     FILE *fptr;
@@ -847,7 +847,6 @@ void menu(){
     }  while(1);
     fclose(fptr);
     printf("Numbers of account present: %d\n",i);
-    printf("====================================\n");
     //initialize variables needed
     char userInput[100];
     char action1[]="createnewbankaccount";
