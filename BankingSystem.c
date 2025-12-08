@@ -892,6 +892,7 @@ void menu(){
         if (i==0 && action!=1){
             printf("No accounts available yet. Please create an account.");
             valid=0;
+            continue;
         }
         if (valid==0){
             printf("Invalid input. Please enter index (within 1 to 6) or keywords only.\n");
