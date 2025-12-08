@@ -177,7 +177,7 @@ void create(int *action){
         while((getchar()) != '\n');
         validity=checkDigit(acc.idNo,12);
         if (validity==0){
-            printf("Please enter numbers only. Eg: 012345678901\n");
+            printf("Please enter 12 numbers only. Eg: 012345678901\n");
         }
     }while (validity==0);
     //Input and check if account type input is valid
