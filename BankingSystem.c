@@ -575,7 +575,7 @@ void deposit(int *action){
     //let user input deposit amount
     do{
         printf("Desired deposit amount: RM");
-        scanf("%s",depositAmountTemp);
+        scanf("%99[^\n]",depositAmountTemp);
         while((getchar()) != '\n'); 
         //check if input is valid for price
         validation=checkDec(depositAmountTemp,validation);
@@ -659,7 +659,7 @@ void withdrawal(int *action){
     float withdrawalAmount;
     do{
         printf("Desired withdrawal amount: RM");
-        scanf("%s",withdrawalAmountTemp);
+        scanf("%99[^\n]",withdrawalAmountTemp);
         while((getchar()) != '\n');   
         // check if input is valid format for price
         validation=checkDec(withdrawalAmountTemp,validation);
@@ -774,7 +774,7 @@ void remittance(int *action){
     //ask user to enter amount to be transfered.
     do{
         printf("Amount to be transferred (Limit: 50000): RM");
-        scanf("%s",transferAmountTemp);
+        scanf("%99[^\n]",transferAmountTemp);
         while((getchar()) != '\n');   
         //check if input format is valid
         validation=checkDec(transferAmountTemp,validation);
