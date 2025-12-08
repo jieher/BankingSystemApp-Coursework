@@ -1,9 +1,9 @@
 # BankingSystemApp-Coursework
-This is a simple banking system that allow users to perform several actions including create account, delete account, deposit money, withdraw money and remittance/transfer money to other accounts.
+This is a simple banking system that allow users to perform several actions including create account, delete account, deposit money, withdraw money and remittance/transfer money to other accounts.\n
 IMPORTANT NOTES: 
 1) Please ensure you have a folder named "database" before using this program.
 2) There is no returning back, you have to enter until u got the correct input. Use ctrl+c to terminate the code halfway.
-3) After finishing one function, it loops back to the menu where you can exit the code there.
+3) After finishing one function, it loops back to the menu where you can exit the code there.\n
 FUNCTIONS AND INPUT RULES:
 1) Menu
    - Users can choose their action here.
@@ -12,7 +12,7 @@ FUNCTIONS AND INPUT RULES:
      - Same goes to "1) Delete", it will enter create as its the first in the list instead of delete.
 2) Create
    - Users have to enter their name, identity number, account type and 4 digit PIN number. Account number is generated randomly and the initial balance will be 0.00.
-   - Name: There's no input rules/limit for names.
+   - Name: There's no input rules/limit for names. Symbols can be included (eg: Mathuram a/p Anbuselvan).
    - Identity number: Only numbers are allowed (eg: 123456-12-1234 (x) 123456121234(/))
    - Account type: similar to the input rule for selecting action in menu, just that the keywords are changed to "savings" and "current".
    - 4 digit PIN: Only accept numbers and not more than 4 digit.
