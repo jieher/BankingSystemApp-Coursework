@@ -795,7 +795,7 @@ void remittance(int *action){
                 validation=1;
             } else{
                 printf("Invalid input. Please enter valid numbers within your balance with 2 decimal place only.\n");
-                printf("Please note that remittance fee miht be included. Ensure that you bank account has extra money for it.");
+                printf("Please note that remittance fee might be included. Ensure that you bank account has extra money for it.\n");
                 validation=0;
             }
         }
@@ -828,6 +828,26 @@ void remittance(int *action){
 
 //Main menu
 void menu(){
+    time_t currentTime;
+    time(&currentTime); 
+    printf("====================================\n");
+    printf("SESSION START");
+    printf("Current Date and Time: %s",ctime(&currentTime));
+    //count all bank account numbers stored in the index file one by one
+    FILE *fptr;
+    fptr=fopen("database\\index.txt","r");
+    //"c" is the bank account number retrieved from index file
+    char c[10];
+    int i=0;
+    do{
+        fgets(c,10,fptr);
+        if (feof(fptr))
+            break ;
+        i=i+1;
+    }  while(1);
+    fclose(fptr);
+    printf("Numbers of account present: %d\n",i);
+    printf("====================================\n");
     //initialize variables needed
     char userInput[100];
     char action1[]="createnewbankaccount";
