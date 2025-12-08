@@ -1,9 +1,11 @@
 # BankingSystemApp-Coursework
-This is a simple banking system that allow users to perform several actions including create account, delete account, deposit money, withdraw money and remittance/transfer money to other accounts.\n
+This is a simple banking system that allow users to perform several actions including create account, delete account, deposit money, withdraw money and remittance/transfer money to other accounts.
+
 IMPORTANT NOTES: 
-1) Please ensure you have a folder named "database" before using this program.
-2) There is no returning back, you have to enter until u got the correct input. Use ctrl+c to terminate the code halfway.
-3) After finishing one function, it loops back to the menu where you can exit the code there.\n
+- Please ensure you have a folder named "database" before using this program.
+- There is no returning back, you have to enter until u got the correct input. Use ctrl+c to terminate the code halfway.
+- After finishing one function, it loops back to the menu where you can exit the code there.
+- 
 FUNCTIONS AND INPUT RULES:
 1) Menu
    - Users can choose their action here.
