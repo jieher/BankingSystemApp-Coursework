@@ -890,7 +890,7 @@ void menu(){
             checkAction1(userInput,&valid,&action,actionlist, actionlistSize);
         }
         if (i==0 && action!=1){
-            printf("No accounts available yet. Please create an account.");
+            printf("No accounts available yet. Please create an account.\n");
             valid=0;
             continue;
         }
