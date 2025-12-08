@@ -5,7 +5,7 @@ IMPORTANT NOTES:
 - Please ensure you have a folder named "database" before using this program.
 - There is no returning back, you have to enter until u got the correct input. Use ctrl+c to terminate the code halfway.
 - After finishing one function, it loops back to the menu where you can exit the code there.
-- 
+
 FUNCTIONS AND INPUT RULES:
 1) Menu
    - Users can choose their action here.
