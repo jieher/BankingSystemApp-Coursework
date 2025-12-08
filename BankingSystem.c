@@ -273,7 +273,7 @@ void create(int *action){
     printf("Account created successfully!\n");
     printf("Bank account number: %d\n",acc.bankAccNo);
     printf("Name: %s\n",acc.name);
-    printf("Identity number: %s",acc.idNo);
+    printf("Identity number: %s\n",acc.idNo);
     printf("Bank account number: %d\n",acc.bankAccNo);
     printf("Account type: %s\n",acc.accType);
     printf("Current balance: RM%.2f\n",acc.balance);
@@ -569,7 +569,7 @@ void deposit(int *action){
     } while (validation==0);
     printf("====================================\n");
     printf("Welcome back %s!\n",acc.name);
-    printf("Your current balance: RM%.2f",acc.balance);
+    printf("Your current balance: RM%.2f\n",acc.balance);
     char depositAmountTemp[10];
     float depositAmount;
     //let user input deposit amount
@@ -658,7 +658,7 @@ void withdrawal(int *action){
     char withdrawalAmountTemp[10];
     float withdrawalAmount;
     do{
-        printf("Desired withdrawal amount: RM");
+        printf("Desired withdrawal amount: RM\n");
         scanf("%s",withdrawalAmountTemp);
         while((getchar()) != '\n');   
         // check if input is valid format for price
@@ -741,25 +741,6 @@ void remittance(int *action){
     printf("Your current balance: RM%.2f\n",senderAcc.balance);
     char transferAmountTemp[10];
     float transferAmount;
-    //ask user to enter amount to be transfered.
-    do{
-        printf("Amount to be transferred (Limit: 50000): RM");
-        scanf("%s",transferAmountTemp);
-        while((getchar()) != '\n');   
-        //check if input format is valid
-        validation=checkDec(transferAmountTemp,validation);
-        if (validation){
-            //copy as float instead of string
-            transferAmount=strtof(transferAmountTemp,NULL);
-            if (transferAmount>0 && transferAmount<=senderAcc.balance){
-                validation=1;
-            } else{
-                printf("Invalid input. Please enter valid numbers within your balance with 2 decimal place only.\n");
-                validation=0;
-            }
-        }
-    }while (validation==0);
-
     //ask user to enter receiver bank account number
     char receiverBankAcc[10];
     do{
@@ -789,7 +770,6 @@ void remittance(int *action){
         }
         fclose(fptr);
     }while(validation==0);
-
     //check if remittance fee should be applied
     float remittancefee;
     if(!checkInputSimilarity(senderAcc.accType,receiverAcc.accType)){
@@ -801,6 +781,25 @@ void remittance(int *action){
             remittancefee=transferAmount*0.03;
         }
     }
+    //ask user to enter amount to be transfered.
+    do{
+        printf("Amount to be transferred (Limit: 50000): RM\n");
+        scanf("%s",transferAmountTemp);
+        while((getchar()) != '\n');   
+        //check if input format is valid
+        validation=checkDec(transferAmountTemp,validation);
+        if (validation){
+            //copy as float instead of string
+            transferAmount=strtof(transferAmountTemp,NULL);
+            if ((transferAmount+remittancefee)>0 && (transferAmount+remittancefee)<=senderAcc.balance){
+                validation=1;
+            } else{
+                printf("Invalid input. Please enter valid numbers within your balance with 2 decimal place only.\n");
+                validation=0;
+            }
+        }
+    }while (validation==0);
+
     senderAcc.balance=senderAcc.balance-transferAmount-remittancefee;
     //update sender's file
     rewrite(senderAcc);
