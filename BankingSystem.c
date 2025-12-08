@@ -574,7 +574,7 @@ void deposit(int *action){
     float depositAmount;
     //let user input deposit amount
     do{
-        printf("Desired deposit amount: RM\n");
+        printf("Desired deposit amount: RM");
         scanf("%s",depositAmountTemp);
         while((getchar()) != '\n'); 
         //check if input is valid for price
@@ -658,7 +658,7 @@ void withdrawal(int *action){
     char withdrawalAmountTemp[10];
     float withdrawalAmount;
     do{
-        printf("Desired withdrawal amount: RM\n");
+        printf("Desired withdrawal amount: RM");
         scanf("%s",withdrawalAmountTemp);
         while((getchar()) != '\n');   
         // check if input is valid format for price
@@ -770,20 +770,10 @@ void remittance(int *action){
         }
         fclose(fptr);
     }while(validation==0);
-    //check if remittance fee should be applied
     float remittancefee;
-    if(!checkInputSimilarity(senderAcc.accType,receiverAcc.accType)){
-        //saving to current is 2%
-        if (checkInputSimilarity(senderAcc.accType,"savings")){
-            remittancefee=transferAmount*0.02;
-        } else {
-            //current to savings is 3%
-            remittancefee=transferAmount*0.03;
-        }
-    }
     //ask user to enter amount to be transfered.
     do{
-        printf("Amount to be transferred (Limit: 50000): RM\n");
+        printf("Amount to be transferred (Limit: 50000): RM");
         scanf("%s",transferAmountTemp);
         while((getchar()) != '\n');   
         //check if input format is valid
@@ -791,10 +781,21 @@ void remittance(int *action){
         if (validation){
             //copy as float instead of string
             transferAmount=strtof(transferAmountTemp,NULL);
+            //check if remittance fee should be applied
+            if(!checkInputSimilarity(senderAcc.accType,receiverAcc.accType)){
+                //saving to current is 2%
+                if (checkInputSimilarity(senderAcc.accType,"savings")){
+                    remittancefee=transferAmount*0.02;
+                } else {
+                    //current to savings is 3%
+                    remittancefee=transferAmount*0.03;
+                }
+            }
             if ((transferAmount+remittancefee)>0 && (transferAmount+remittancefee)<=senderAcc.balance){
                 validation=1;
             } else{
                 printf("Invalid input. Please enter valid numbers within your balance with 2 decimal place only.\n");
+                printf("Please note that remittance fee miht be included. Ensure that you bank account has extra money for it.");
                 validation=0;
             }
         }
